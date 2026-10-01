@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ภารกิจผู้พิทักษ์ไซเบอร์ | SafeTech ป.5</title>
+
+<style>
+:root{
+    --blue:#1976d2;
+    --dark:#123b5d;
+    --green:#2e9b4b;
+    --yellow:#ffc928;
+    --orange:#ff8c42;
+    --pink:#ff6f91;
+    --bg:#eef7ff;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:"Tahoma","Arial",sans-serif;
+    background:
+        radial-gradient(circle at 10% 20%,#ffffff 0 50px,transparent 51px),
+        radial-gradient(circle at 90% 15%,#ffffff 0 70px,transparent 71px),
+        linear-gradient(135deg,#eaf6ff,#fff7df);
+    color:#123b5d;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    background:linear-gradient(135deg,#123b5d,#1769aa);
+    color:white;
+    padding:14px 25px;
+    box-shadow:0 5px 20px #123b5d33;
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.nav a{
+    color:white;
+    text-decoration:none;
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:14px;
+    transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+    background:#ffc928;
+    color:#4b3a00;
+}
+
+/* =========================
+   GAME CONTAINER
+========================= */
+
+.game-shell{
+    max-width:1150px;
+    margin:30px auto 50px;
+    padding:0 18px;
+}
+
+/* =========================
+   GAME TITLE
+========================= */
+
+.hero-game{
+    background:
+        linear-gradient(135deg,#123b5d,#1976d2);
+    color:white;
+    border-radius:30px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 15px 35px #123b5d33;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-game:before{
+    content:"🌐   ⭐   🛡️   💻   🔒   ⭐   🌐";
+    position:absolute;
+    top:10px;
+    left:0;
+    width:100%;
+    font-size:28px;
+    opacity:.12;
+}
+
+.hero-game h1{
+    position:relative;
+    margin:15px 0 8px;
+    font-size:clamp(30px,5vw,48px);
+}
+
+.hero-game p{
+    position:relative;
+    margin:0;
+    font-size:18px;
+}
+
+/* =========================
+   HUD
+========================= */
+
+.hud{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:22px;
+}
+
+.hud span{
+    background:white;
+    color:#123b5d;
+    padding:10px 18px;
+    border-radius:50px;
+    font-weight:bold;
+    box-shadow:0 5px 15px #0002;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.instructions{
+    background:white;
+    border-radius:20px;
+    padding:16px 20px;
+    margin:18px auto;
+    max-width:1000px;
+    text-align:center;
+    box-shadow:0 7px 20px #123b5d18;
+    font-size:16px;
+}
+
+.instructions b{
+    color:#1976d2;
+}
+
+/* =========================
+   STAGE
+========================= */
+
+.stage-tabs{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:20px 0;
+}
+
+.stage-tab{
+    padding:11px 18px;
+    border-radius:30px;
+    background:#dbeaf6;
+    color:#668099;
+    font-weight:bold;
+}
+
+.stage-tab.active{
+    background:#ffc928;
+    color:#604900;
+    transform:scale(1.04);
+}
+
+.stage-tab.done{
+    background:#d9f3df;
+    color:#23733a;
+}
+
+/* =========================
+   CANVAS
+========================= */
+
+.canvas-wrapper{
+    position:relative;
+    max-width:1000px;
+    margin:auto;
+}
+
+#gameCanvas{
+    width:100%;
+    height:auto;
+    display:block;
+    aspect-ratio:16/9;
+    border:8px solid white;
+    border-radius:30px;
+    box-shadow:0 15px 35px #123b5d30;
+    background:#cceeff;
+    touch-action:none;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin:18px auto;
+}
+
+.ctrl{
+    width:60px;
+    height:50px;
+    border:none;
+    border-radius:15px;
+    background:white;
+    color:#123b5d;
+    font-size:25px;
+    font-weight:bold;
+    box-shadow:0 5px 15px #123b5d25;
+    cursor:pointer;
+}
+
+.ctrl:hover{
+    background:#ffc928;
+}
+
+.ctrl:active{
+    transform:scale(.95);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btns{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.game-btn{
+    display:inline-block;
+    padding:14px 25px;
+    border-radius:50px;
+    text-decoration:none;
+    border:none;
+    font-weight:bold;
+    font-size:17px;
+    cursor:pointer;
+    background:#1976d2;
+    color:white;
+    box-shadow:0 7px 18px #1976d244;
+}
+
+.game-btn.green{
+    background:#2e9b4b;
+}
+
+.game-btn.orange{
+    background:#ff8c42;
+}
+
+.game-btn.gray{
+    background:#dceaf5;
+    color:#234;
+}
+
+.game-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.result{
+    display:none;
+    background:white;
+    border-radius:28px;
+    padding:35px 25px;
+    margin:25px auto;
+    max-width:850px;
+    text-align:center;
+    box-shadow:0 12px 35px #123b5d22;
+}
+
+.result.show{
+    display:block;
+}
+
+.result .big{
+    font-size:70px;
+}
+
+.result h2{
+    color:#2e9b4b;
+    font-size:32px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    text-align:center;
+    padding:25px;
+    background:#123b5d;
+    color:white;
+    margin-top:50px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:650px){
+
+    header{
+        padding:12px;
+    }
+
+    .logo{
+        text-align:center;
+        font-size:21px;
+    }
+
+    .nav{
+        justify-content:center;
+    }
+
+    .nav a{
+        font-size:12px;
+        padding:7px 9px;
+    }
+
+    .game-shell{
+        padding:0 8px;
+    }
+
+    .hero-game{
+        padding:22px 15px;
+    }
+
+    .hero-game p{
+        font-size:15px;
+    }
+
+    .hud span{
+        padding:8px 12px;
+        font-size:14px;
+    }
+
+    .ctrl{
+        width:52px;
+        height:48px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+<div class="header-inner">
+
+<div class="logo">
+🛡️ SafeTech ป.5
+</div>
+
+<nav class="nav">
+
+<a href="index.html">🏠 หน้าหลัก</a>
+
+<a href="manual.html">
+📖 คู่มือ
+</a>
+
+<a href="login.html">
+🔐 เข้าสู่ระบบ
+</a>
+
+<a href="pretest.html">
+📝 ก่อนเรียน
+</a>
+
+<a href="lessons.html">
+📚 บทเรียน
+</a>
+
+<a href="summary.html">
+📌 สรุป
+</a>
+
+<a href="game.html" class="active">
+🎮 เกม
+</a>
+
+<a href="posttest.html">
+🏆 หลังเรียน
+</a>
+
+<a href="creator.html">
+👩‍💻 ผู้จัดทำ
+</a>
+
+</nav>
+
+</div>
+</header>
+
+
+<!-- =========================
+     GAME
+========================= -->
+
+<main class="game-shell">
+
+<section class="hero-game">
+
+<h1>
+🎮 ภารกิจผู้พิทักษ์ไซเบอร์
+</h1>
+
+<p>
+เกมผจญภัย 3 ด่าน
+<br>
+เก็บสิ่งดี หลบสิ่งอันตราย และช่วยโลกออนไลน์ให้ปลอดภัย!
+</p>
+
+<div class="hud">
+
+<span>
+⭐ คะแนน:
+<b id="score">0</b>
+</span>
+
+<span>
+❤️ ชีวิต:
+<b id="lives">3</b>
+</span>
+
+<span>
+⏱️ เวลา:
+<b id="time">60</b>
+</span>
+
+</div>
+
+</section>
+
+
+<!-- MESSAGE -->
+
+<div id="gate" class="instructions"></div>
+
+
+<!-- STAGE -->
+
+<div class="stage-tabs">
+
+<span class="stage-tab active" id="tab1">
+ด่าน 1 💬 สื่อสาร
+</span>
+
+<span class="stage-tab" id="tab2">
+ด่าน 2 🤝 มารยาท
+</span>
+
+<span class="stage-tab" id="tab3">
+ด่าน 3 🛡️ ปลอดภัย
+</span>
+
+</div>
+
+
+<!-- GAME AREA -->
+
+<div class="canvas-wrapper">
+
+<canvas
+id="gameCanvas"
+width="1000"
+height="562">
+</canvas>
+
+</div>
+
+
+<!-- INSTRUCTION -->
+
+<div class="instructions">
+
+<b>🎯 วิธีเล่น</b>
+
+<br>
+
+ใช้ปุ่ม
+⬅️ ➡️ ⬆️ ⬇️
+หรือปุ่มด้านล่าง
+
+<br>
+
+🧑‍💻 บังคับตัวละครให้เก็บสิ่งดี
+⭐ และหลบสิ่งอันตราย ⚠️
+
+<br>
+
+ต้องผ่านครบทั้ง 3 ด่าน
+จึงจะปลดล็อกแบบทดสอบหลังเรียน
+
+</div>
+
+
+<!-- MOBILE CONTROL -->
+
+<div class="controls">
+
+<button class="ctrl" data-key="ArrowLeft">
+←
+</button>
+
+<button class="ctrl" data-key="ArrowUp">
+↑
+</button>
+
+<button class="ctrl" data-key="ArrowDown">
+↓
+</button>
+
+<button class="ctrl" data-key="ArrowRight">
+→
+</button>
+
+</div>
+
+
+<!-- RESULT -->
+
+<section id="result" class="result">
+
+<div class="big">
+🏆
+</div>
+
+<h2>
+ภารกิจสำเร็จ!
+</h2>
+
+<p id="resultText">
+เยี่ยมมาก!
+</p>
+
+<div class="btns">
+
+<a
+class="game-btn gray"
+href="summary.html">
+← ย้อนกลับสรุปบทเรียน
+</a>
+
+<a
+id="postBtn"
+class="game-btn green"
+href="posttest.html">
+🏆 ไปแบบทดสอบหลังเรียน →
+</a>
+
+</div>
+
+</section>
+
+
+<div class="btns">
+
+<a
+class="game-btn gray"
+href="summary.html">
+← ย้อนกลับสรุปบทเรียน
+</a>
+
+</div>
+
+</main>
+
+
+<footer>
+🛡️ SafeTech ป.5
+<br>
+การใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย
+</footer>
+
+
+<script>
+
+/* =====================================================
+   ตรวจสอบว่าเรียนครบทั้ง 3 เรื่องหรือยัง
+===================================================== */
+
+const ready =
+localStorage.getItem("lesson1Done") === "1" &&
+localStorage.getItem("lesson2Done") === "1" &&
+localStorage.getItem("lesson3Done") === "1";
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const gate =
+document.getElementById("gate");
+
+const canvas =
+document.getElementById("gameCanvas");
+
+const ctx =
+canvas.getContext("2d");
+
+const scoreEl =
+document.getElementById("score");
+
+const livesEl =
+document.getElementById("lives");
+
+const timeEl =
+document.getElementById("time");
+
+const result =
+document.getElementById("result");
+
+const postBtn =
+document.getElementById("postBtn");
+
+
+/* =====================================================
+   GAME VARIABLES
+===================================================== */
+
+let keys = {};
+
+let score = 0;
+
+let lives = 3;
+
+let time = 60;
+
+let stage = 1;
+
+let running = false;
+
+let raf;
+
+let timer;
+
+let stageItems = [];
+
+let stageHazards = [];
+
+let player;
+
+
+/* =====================================================
+   STAGE DATA
+===================================================== */
+
+const stages = {
+
+1:{
+name:"การติดต่อสื่อสารผ่านอินเทอร์เน็ต",
+
+good:[
+"📧",
+"💬",
+"🌐",
+"📱",
+"✉️"
+],
+
+bad:[
+"⚠️",
+"❌"
+],
+
+bg1:"#bdefff",
+bg2:"#eafcff",
+
+need:7,
+hazard:3
+},
+
+2:{
+name:"มารยาทในการติดต่อสื่อสารผ่านอินเทอร์เน็ต",
+
+good:[
+"🤝",
+"💖",
+"😊",
+"👍",
+"🗨️"
+],
+
+bad:[
+"😡",
+"💢",
+"📣"
+],
+
+bg1:"#ffe8a8",
+bg2:"#fff6df",
+
+need:8,
+hazard:4
+},
+
+3:{
+name:"อาชญากรรมทางอินเทอร์เน็ตและการป้องกัน",
+
+good:[
+"🛡️",
+"🔒",
+"🔑",
+"✅",
+"👀"
+],
+
+bad:[
+"🎣",
+"⚠️",
+"🕵️",
+"❗"
+],
+
+bg1:"#d9d6ff",
+bg2:"#f3f1ff",
+
+need:9,
+hazard:5
+}
+
+};
+
+
+/* =====================================================
+   RANDOM
+===================================================== */
+
+function rand(min,max){
+
+return Math.random() *
+(max-min) + min;
+
+}
+
+
+/* =====================================================
+   CREATE OBJECTS
+===================================================== */
+
+function makeObjects(count,array){
+
+return Array.from(
+{length:count},
+
+()=>({
+
+x:rand(80,920),
+
+y:rand(90,490),
+
+r:24,
+
+icon:
+array[
+Math.floor(
+Math.random()*array.length
+)
+],
+
+hit:false,
+
+vx:rand(-.35,.35),
+
+vy:rand(-.35,.35)
+
+})
+
+);
+
+}
+
+
+/* =====================================================
+   START STAGE
+===================================================== */
+
+function startStage(number){
+
+stage = number;
+
+time = 60;
+
+lives = 3;
+
+running = true;
+
+result.classList.remove("show");
+
+const data =
+stages[stage];
+
+
+/* PLAYER */
+
+player = {
+
+x:80,
+
+y:280,
+
+r:24,
+
+speed:5
+
+};
+
+
+/* OBJECTS */
+
+stageItems =
+makeObjects(
+data.need,
+data.good
+);
+
+stageHazards =
+makeObjects(
+data.hazard,
+data.bad
+);
+
+
+/* UPDATE STAGE TAB */
+
+document
+.querySelectorAll(".stage-tab")
+.forEach(
+(tab,index)=>{
+
+tab.classList.toggle(
+"active",
+index+1 === stage
+);
+
+tab.classList.toggle(
+"done",
+index+1 < stage
+);
+
+});
+
+
+/* HUD */
+
+scoreEl.textContent =
+score;
+
+livesEl.textContent =
+lives;
+
+timeEl.textContent =
+time;
+
+
+/* TIMER */
+
+clearInterval(timer);
+
+timer =
+setInterval(()=>{
+
+if(!running)return;
+
+time--;
+
+timeEl.textContent =
+time;
+
+if(time<=0){
+
+loseLife(
+"หมดเวลา!"
+);
+
+}
+
+},1000);
+
+
+/* GAME LOOP */
+
+cancelAnimationFrame(raf);
+
+loop();
+
+}
+
+
+/* =====================================================
+   LOSE LIFE
+===================================================== */
+
+function loseLife(message){
+
+lives--;
+
+livesEl.textContent =
+lives;
+
+
+if(lives<=0){
+
+running=false;
+
+clearInterval(timer);
+
+gate.innerHTML =
+"💫 <b>"+message+
+"</b><br>เริ่มด่านใหม่อีกครั้ง";
+
+setTimeout(()=>{
+
+startStage(stage);
+
+},1000);
+
+return;
+
+}
+
+
+/* RESET PLAYER */
+
+player.x=80;
+
+player.y=280;
+
+gate.innerHTML =
+"💡 "+message+
+" เหลือชีวิต "+
+lives+
+" ดวง";
+
+}
+
+
+/* =====================================================
+   DISTANCE
+===================================================== */
+
+function distance(a,b){
+
+return Math.hypot(
+a.x-b.x,
+a.y-b.y
+);
+
+}
+
+
+/* =====================================================
+   UPDATE
+===================================================== */
+
+function update(){
+
+if(!running)return;
+
+
+let dx=0;
+
+let dy=0;
+
+
+if(keys.ArrowLeft)
+dx--;
+
+if(keys.ArrowRight)
+dx++;
+
+if(keys.ArrowUp)
+dy--;
+
+if(keys.ArrowDown)
+dy++;
+
+
+if(dx || dy){
+
+const length =
+Math.hypot(dx,dy);
+
+player.x +=
+(dx/length) *
+player.speed;
+
+player.y +=
+(dy/length) *
+player.speed;
+
+}
+
+
+/* BOUNDARY */
+
+player.x =
+Math.max(
+35,
+Math.min(
+965,
+player.x
+)
+);
+
+player.y =
+Math.max(
+75,
+Math.min(
+527,
+player.y
+)
+);
+
+
+/* GOOD OBJECTS */
+
+stageItems.forEach(item=>{
+
+if(item.hit)return;
+
+
+/* movement */
+
+item.x += item.vx;
+
+item.y += item.vy;
+
+
+/* bounce */
+
+if(
+item.x<40 ||
+item.x>960
+){
+
+item.vx *= -1;
+
+}
+
+if(
+item.y<70 ||
+item.y>530
+){
+
+item.vy *= -1;
+
+}
+
+
+/* collision */
+
+if(
+distance(player,item)<45
+){
+
+item.hit=true;
+
+score += 10;
+
+scoreEl.textContent =
+score;
+
+}
+
+});
+
+
+/* HAZARDS */
+
+stageHazards.forEach(item=>{
+
+if(item.hit)return;
+
+
+/* movement */
+
+item.x += item.vx;
+
+item.y += item.vy;
+
+
+/* bounce */
+
+if(
+item.x<40 ||
+item.x>960
+){
+
+item.vx *= -1;
+
+}
+
+if(
+item.y<70 ||
+item.y>530
+){
+
+item.vy *= -1;
+
+}
+
+
+/* collision */
+
+if(
+distance(player,item)<44
+){
+
+item.hit=true;
+
+score =
+Math.max(
+0,
+score-5
+);
+
+scoreEl.textContent =
+score;
+
+loseLife(
+"ระวัง! เจอสิ่งที่ไม่ปลอดภัย"
+);
+
+}
+
+});
+
+
+/* STAGE COMPLETE */
+
+if(
+stageItems.every(
+item=>item.hit
+)
+){
+
+nextStage();
+
+}
+
+}
+
+
+/* =====================================================
+   NEXT STAGE
+===================================================== */
+
+function nextStage(){
+
+if(!running)return;
+
+running=false;
+
+clearInterval(timer);
+
+
+if(stage<3){
+
+gate.innerHTML =
+"🎉 <b>ผ่านด่าน "+
+stage+
+"!</b><br>เตรียมเข้าสู่ด่าน "+
+(stage+1)+
+" — "+
+stages[stage+1].name;
+
+setTimeout(()=>{
+
+startStage(
+stage+1
+);
+
+},1500);
+
+}
+
+else{
+
+finishGame();
+
+}
+
+}
+
+
+/* =====================================================
+   FINISH GAME
+===================================================== */
+
+function finishGame(){
+
+running=false;
+
+clearInterval(timer);
+
+
+/* SAVE GAME */
+
+localStorage.setItem(
+"gameDone",
+"1"
+);
+
+
+/* UNLOCK POST TEST */
+
+postBtn.href =
+"posttest.html";
+
+postBtn.textContent =
+"🏆 ไปแบบทดสอบหลังเรียน →";
+
+
+result.classList.add(
+"show"
+);
+
+
+document
+.getElementById("resultText")
+.textContent =
+"สุดยอด! ผ่านภารกิจครบทั้ง 3 ด่าน คะแนนรวม "+
+score+
+" คะแนน ตอนนี้ไปทำแบบทดสอบหลังเรียนได้แล้ว";
+
+
+gate.innerHTML =
+"🌟 <b>ภารกิจผู้พิทักษ์ไซเบอร์สำเร็จ!</b><br>ปลดล็อกแบบทดสอบหลังเรียนแล้ว";
+
+
+draw();
+
+}
+
+
+/* =====================================================
+   DRAW GAME
+===================================================== */
+
+function draw(){
+
+const data =
+stages[stage];
+
+
+/* BACKGROUND */
+
+let gradient =
+ctx.createLinearGradient(
+0,
+0,
+0,
+canvas.height
+);
+
+gradient.addColorStop(
+0,
+data.bg1
+);
+
+gradient.addColorStop(
+1,
+data.bg2
+);
+
+ctx.fillStyle =
+gradient;
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+/* GRID */
+
+ctx.globalAlpha=.2;
+
+for(
+let x=0;
+x<canvas.width;
+x+=50
+){
+
+ctx.strokeStyle="#ffffff";
+
+ctx.beginPath();
+
+ctx.moveTo(x,0);
+
+ctx.lineTo(
+x,
+canvas.height
+);
+
+ctx.stroke();
+
+}
+
+for(
+let y=0;
+y<canvas.height;
+y+=50
+){
+
+ctx.strokeStyle="#ffffff";
+
+ctx.beginPath();
+
+ctx.moveTo(0,y);
+
+ctx.lineTo(
+canvas.width,
+y
+);
+
+ctx.stroke();
+
+}
+
+ctx.globalAlpha=1;
+
+
+/* STAGE TITLE */
+
+ctx.fillStyle =
+"#123b5d";
+
+ctx.font =
+"bold 24px Arial";
+
+ctx.fillText(
+"ด่าน "+
+stage+
+" : "+
+data.name,
+28,
+42
+);
+
+
+/* LINE */
+
+ctx.fillStyle =
+"#ffffff";
+
+ctx.fillRect(
+25,
+55,
+950,
+3
+);
+
+
+/* GOOD ITEMS */
+
+stageItems.forEach(item=>{
+
+if(item.hit)return;
+
+ctx.font =
+"34px serif";
+
+ctx.textAlign =
+"center";
+
+ctx.fillText(
+item.icon,
+item.x,
+item.y
+);
+
+});
+
+
+/* HAZARDS */
+
+stageHazards.forEach(item=>{
+
+if(item.hit)return;
+
+ctx.font =
+"34px serif";
+
+ctx.textAlign =
+"center";
+
+ctx.fillText(
+item.icon,
+item.x,
+item.y
+);
+
+});
+
+
+/* PLAYER */
+
+ctx.beginPath();
+
+ctx.arc(
+player.x,
+player.y,
+28,
+0,
+Math.PI*2
+);
+
+ctx.fillStyle =
+"#1976d2";
+
+ctx.fill();
+
+ctx.strokeStyle =
+"#ffffff";
+
+ctx.lineWidth=4;
+
+ctx.stroke();
+
+ctx.font =
+"29px serif";
+
+ctx.textAlign =
+"center";
+
+ctx.fillText(
+"🧑‍💻",
+player.x,
+player.y+10
+);
+
+
+/* OBJECTIVE */
+
+ctx.textAlign =
+"left";
+
+ctx.fillStyle =
+"#123b5d";
+
+ctx.font =
+"bold 17px Arial";
+
+ctx.fillText(
+"🎯 เก็บสิ่งดีให้ครบ "+
+data.need+
+" ชิ้น",
+28,
+canvas.height-20
+);
+
+}
+
+
+/* =====================================================
+   GAME LOOP
+===================================================== */
+
+function loop(){
+
+update();
+
+draw();
+
+raf =
+requestAnimationFrame(loop);
+
+}
+
+
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
+window.addEventListener(
+"keydown",
+event=>{
+
+if([
+"ArrowLeft",
+"ArrowRight",
+"ArrowUp",
+"ArrowDown"
+].includes(event.key)){
+
+event.preventDefault();
+
+keys[event.key]=true;
+
+}
+
+});
+
+
+window.addEventListener(
+"keyup",
+event=>{
+
+keys[event.key]=false;
+
+});
+
+
+/* =====================================================
+   MOBILE BUTTONS
+===================================================== */
+
+document
+.querySelectorAll(".ctrl")
+.forEach(button=>{
+
+const key =
+button.dataset.key;
+
+
+/* PRESS */
+
+button.addEventListener(
+"pointerdown",
+event=>{
+
+event.preventDefault();
+
+keys[key]=true;
+
+}
+);
+
+
+/* RELEASE */
+
+[
+"pointerup",
+"pointerleave",
+"pointercancel"
+].forEach(type=>{
+
+button.addEventListener(
+type,
+event=>{
+
+event.preventDefault();
+
+keys[key]=false;
+
+}
+
+);
+
+});
+
+});
+
+
+/* =====================================================
+   START
+===================================================== */
+
+if(!ready){
+
+gate.innerHTML =
+
+"🔒 <b>ยังไม่เปิดภารกิจ</b><br>"+
+"กรุณาเรียนให้ครบทั้ง 3 เรื่องก่อน "+
+"จึงจะสามารถเล่นเกมการศึกษาได้";
+
+canvas.style.display =
+"none";
+
+document
+.querySelector(".controls")
+.style.display =
+"none";
+
+}
+
+else{
+
+gate.innerHTML =
+
+"🎯 <b>พร้อมลุย!</b><br>"+
+"บังคับตัวละคร เก็บสิ่งดี และหลบสิ่งอันตราย";
+
+startStage(1);
+
+}
+
+</script>
+
+</body>
+</html>
